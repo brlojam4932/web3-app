@@ -5,6 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { TransactionContext } from '../context/TransactionContext';
 
 import { Loader } from "./";
+import { shortendAddress } from '../utils/shortenAddress';
 
 // Java Script Mastery
 // tutorial: https://youtu.be/Wn_Kb3MR_cU
@@ -113,7 +114,7 @@ const Welcome = () => {
               </div>
               <div>
                 <p className='text-white font-light text-sm'>
-                  0x...
+                  {shortendAddress(currentAccount)}
                 </p>
                 <p className='text-white font-semibold text-lg mt-1'>
                   Ethereum
@@ -127,7 +128,7 @@ const Welcome = () => {
             <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
             <Input placeholder="Keyword (GIF)" name="keyword" type="text" handleChange={handleChange} />
-            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />handleChange
+            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
             <div className='h-[1px] w-full bg-gray-400 my-2' />
 
             {false ? (
