@@ -17,16 +17,14 @@ const getEthereumContract = () => {
   const signer = provider.getSigner();
   const transactionContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-  return transactionContract;
-
-/*
-    console.log({
+  /*
+   console.log({
     provider,
     signer,
     transactionContract
   });
 */
-
+  return transactionContract;
 }
 
 
@@ -40,9 +38,39 @@ export const TransactionProvider = ({ children }) => {
   const [formData, setFormData] = useState({ addressTo: "", amount: "", keyword: "", message: ""}); // state variable created here, passed through the context Provider's values as objects, down below
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
+  const [transactions, setTransactions] = useState([]);
+
 
   const handleChange = (e, name) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  }
+
+
+  const getAllTransactions = async () => {
+    try {
+      // check if metamask is installed
+      if(!ethereum) return alert("Please install Metamask");
+      const transactionContract = getEthereumContract();
+
+      const availableTransactions = await transactionContract.getAllTransactions();
+
+      // getting the keys and values from the array's object and instantly return an object
+      const structuredTransactions = availableTransactions.map((transaction) => ({
+        addressTo: transaction.receiver,
+        addressFrom: transaction.sender,
+        timestamp: new Date(transaction.timestamp.toNumber * 1000).toLocaleString(),
+        message: transaction.message,
+        keyword: transaction.keyword,
+        amount: parseInt(transaction.amount._hex) * (10 ** 18)
+      }));
+
+      console.log("structured tx: ", structuredTransactions);
+
+      setTransactions(structuredTransactions);
+      //console.log("avail transactions: ", availableTransactions);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 
@@ -53,13 +81,13 @@ export const TransactionProvider = ({ children }) => {
 
       // get accounts
       const accounts = await ethereum.request({ method: "eth_accounts" });
-      console.log(accounts);
+      console.log("accounts:", accounts);
 
       // check if account exists and set to our state
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
 
-        // getAllTransactions();
+        getAllTransactions();
       } else {
         console.log("No accounts found.");
       }
@@ -69,6 +97,23 @@ export const TransactionProvider = ({ children }) => {
       throw new Error("No ethereum object found.");
     }
   }
+
+  const checkIfTransactionsExist = async () => {
+    try {
+      // we get the transaction contract and then the transaction count
+      const transactionContract = getEthereumContract();
+      const transactionCount = await transactionContract.getTransactionCount();
+      //console.log("transaction count: ", transactionCount);
+
+      // here, we set "transactionCount" = transactionCount in local storage
+      window.localStorage.setItem("transactionCount", transactionCount);
+      //console.log("transaction count: ", transactionCount);
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("No ethereum object found");
+    }
+  };
 
 
   // we conncect to Metamask here
@@ -87,7 +132,7 @@ export const TransactionProvider = ({ children }) => {
 
       throw new Error("No ethereum object found.");
     }
-  }
+  };
 
 
   const sendTransaction = async () => {
@@ -136,7 +181,8 @@ export const TransactionProvider = ({ children }) => {
   // this "useEffect" will check only at the start of our session 
   useEffect(() => {
     checkIfWalletIsConnected();
-  }, [])
+    checkIfTransactionsExist();
+  }, []);
 
   // we first create a test: value={{ value: "test" }}
   // then we replace it with our "connectWallet: connectWallet", key/value pair function

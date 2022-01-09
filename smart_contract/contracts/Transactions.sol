@@ -33,7 +33,7 @@ contract Transactions {
   }
 
   function getAllTransactions() public view returns(TransferStruct[] memory) {
-    // return transactions;
+    return transactions;
   }
 
   function getTransactionCount() public view returns(uint256) {
@@ -41,3 +41,5 @@ contract Transactions {
 
   }
 }
+
+// to re-deploy: go to scrips folder, deploy.js

@@ -2,6 +2,8 @@ require('@nomiclabs/hardhat-waffle');
 
 // https://dashboard.alchemyapi.io/
 
+// url is from my alchemy http address
+// accounts is the exported key from my metamask private key account
 module.exports = {
   solidity: '0.8.0',
   networks: {

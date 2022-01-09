@@ -1,4 +1,5 @@
 import abi from "./Transactions.json";
 
 export const contractABI = abi.abi;
-export const contractAddress = '0x1dE713352890342038d0FdD4C09d007d3AC86F44';
+// hardhat transaction deployed contract address
+export const contractAddress = '0xfE57585Be3ee0d76Def9F7512f05546684501242';
