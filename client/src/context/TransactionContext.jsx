@@ -35,7 +35,7 @@ const getEthereumContract = () => {
 // if succesfull, we will have transfered our data to all of our components, using context
 export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
-  const [formData, setFormData] = useState({ addressTo: "", amount: "", keyword: "", message: ""}); // state variable created here, passed through the context Provider's values as objects, down below
+  const [formData, setFormData] = useState({ addressTo: "", amount: "", keyword: "", message: "" }); // state variable created here, passed through the context Provider's values as objects, down below
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
   const [transactions, setTransactions] = useState([]);
@@ -49,7 +49,7 @@ export const TransactionProvider = ({ children }) => {
   const getAllTransactions = async () => {
     try {
       // check if metamask is installed
-      if(!ethereum) return alert("Please install Metamask");
+      if (!ethereum) return alert("Please install Metamask");
       const transactionContract = getEthereumContract();
 
       const availableTransactions = await transactionContract.getAllTransactions();
@@ -58,10 +58,10 @@ export const TransactionProvider = ({ children }) => {
       const structuredTransactions = availableTransactions.map((transaction) => ({
         addressTo: transaction.receiver,
         addressFrom: transaction.sender,
-        timestamp: new Date(transaction.timestamp.toNumber * 1000).toLocaleString(),
+        timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
         message: transaction.message,
         keyword: transaction.keyword,
-        amount: parseInt(transaction.amount._hex) * (10 ** 18)
+        amount: parseInt(transaction.amount._hex) / (10 ** 18)
       }));
 
       console.log("structured tx: ", structuredTransactions);
@@ -138,7 +138,7 @@ export const TransactionProvider = ({ children }) => {
   const sendTransaction = async () => {
     // first, we check if Metamask is installed
     try {
-      if(!ethereum) return alert("Please install Metamask");
+      if (!ethereum) return alert("Please install Metamask");
 
       // get data from the form....
       const { addressTo, amount, keyword, message } = formData;
@@ -156,7 +156,7 @@ export const TransactionProvider = ({ children }) => {
           value: parsedAmount._hex // 0.000021 Ether
         }]
       });
-      
+
       // now we need to store our transaction to the blockchain, using our function from our smart contract
       const transactionHash = await transactionContract.addToBlockchain(addressTo, parsedAmount, message, keyword);
 
@@ -171,10 +171,12 @@ export const TransactionProvider = ({ children }) => {
 
       setTransactionCount(transactionCount.toNumber());
 
+      window.reload();
+      
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object"); 
+      throw new Error("No ethereum object");
     }
   }
 
@@ -191,7 +193,7 @@ export const TransactionProvider = ({ children }) => {
 
   // current account state can be passed as an object, here...
   return (
-    <TransactionContext.Provider value={{ connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction }}>
+    <TransactionContext.Provider value={{ connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction, transactions, isLoading }}>
       {children}
     </TransactionContext.Provider>
   )

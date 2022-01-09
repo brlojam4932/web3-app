@@ -35,7 +35,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 const Welcome = () => {
   // desstructured value from context and use it as a hook
   // we can now use our connectWallet function and replace "value"
-  const { connectWallet, currentAccount, formData, handleChange, sendTransaction } = useContext(TransactionContext);
+  const { connectWallet, currentAccount, formData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext);
 
   // if succesfull, we will have transfered our data to all of our components, using context
   //console.log(value);
@@ -59,10 +59,8 @@ const Welcome = () => {
     // check if user has filled the input fields
     if(!addressTo || !amount || !keyword || !message) return alert("Fill out input fields!");
 
-
     sendTransaction();
-    console.log("clicked")
-
+    //console.log("clicked")
   }
 
   return (
@@ -131,7 +129,7 @@ const Welcome = () => {
             <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
             <div className='h-[1px] w-full bg-gray-400 my-2' />
 
-            {false ? (
+            {isLoading ? (
               <Loader />
             ) : (
               <button
