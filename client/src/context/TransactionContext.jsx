@@ -39,6 +39,7 @@ export const TransactionProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
   const [transactions, setTransactions] = useState([]);
+  const [txComplete, setTxComplete] = useState(false);
 
 
   const handleChange = (e, name) => {
@@ -165,19 +166,22 @@ export const TransactionProvider = ({ children }) => {
       await transactionHash.wait(); // here, we wait for the transaction to execute
 
       setIsLoading(false);
-      console.log(`Success - ${transactionHash.hash}`);
-
+      setTxComplete(true);
+      alert(`Success - ${transactionHash.hash}`);
+     
       const transactionCount = await transactionContract.getTransactionCount();
 
       setTransactionCount(transactionCount.toNumber());
 
       window.reload();
-      
+
     } catch (error) {
       console.log(error);
+      console.log("Must provide an Etheruem Address");
 
       throw new Error("No ethereum object");
     }
+    
   }
 
   // this "useEffect" will check only at the start of our session 
@@ -193,7 +197,7 @@ export const TransactionProvider = ({ children }) => {
 
   // current account state can be passed as an object, here...
   return (
-    <TransactionContext.Provider value={{ connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction, transactions, isLoading }}>
+    <TransactionContext.Provider value={{ connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction, transactions, isLoading, txComplete }}>
       {children}
     </TransactionContext.Provider>
   )

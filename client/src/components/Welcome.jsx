@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 //import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from 'react-icons/si';
 import { BsInfoCircle } from "react-icons/bs";
@@ -35,19 +35,14 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 const Welcome = () => {
   // desstructured value from context and use it as a hook
   // we can now use our connectWallet function and replace "value"
-  const { connectWallet, currentAccount, formData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext);
+  const { connectWallet, currentAccount, formData, handleChange, sendTransaction, isLoading, txComplete } = useContext(TransactionContext);
+
+  const [successBtn, setSuccessBtn] = useState(true);
+
 
   // if succesfull, we will have transfered our data to all of our components, using context
   //console.log(value);
   // in the console, in our explorer, we can see we get "test" as a console log
-
-  // to do:
-  // this function is no longer necessary
-  /*
-  const connectWallet = () => {
-
-  }
-  */
 
   // destructured props/values from "inputs" form
   const handleSubmit = (e) => {
@@ -57,7 +52,7 @@ const Welcome = () => {
     e.preventDefault();
 
     // check if user has filled the input fields
-    if(!addressTo || !amount || !keyword || !message) return alert("Fill out input fields!");
+    if (!addressTo || !amount || !keyword || !message) return alert("Fill out input fields!");
 
     sendTransaction();
     //console.log("clicked")
@@ -100,8 +95,15 @@ const Welcome = () => {
             </div>
           </div>
         </div>
-
+        {/* eth card */}
         <div className='flex flex-col flex-1 items-center justify-start w-full md:mt-0 mt-10'>
+          {txComplete && successBtn ?
+            (<div className='flex justify-center'>
+              <button onClick={() => setSuccessBtn(false)} className='text-white w-80 mt-2 border-[1px] p-2 border-[3d4f7c] rounded-md cursor-pointer'>Transaction - Success!</button>
+            </div>
+            ) :
+            (null)
+          }
           <div className=' p-3 justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card white-glassmorphism'>
             <div className='flex justify-between flex-col w-full h-full'>
               <div className='flex justify-between items-start'>
@@ -140,7 +142,6 @@ const Welcome = () => {
                 Send Now
               </button>
             )}
-
           </div>
         </div>
       </div>

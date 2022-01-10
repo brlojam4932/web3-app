@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+// for fetching Gifs and dummy data
+
 const API_KEY = import.meta.env.VITE_GIPHY_API;
 
 const useFetch = ({ keyword }) => {
