@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { TransactionContext } from '../context/TransactionContext';
 
 import useFetch from "../hooks/useFetch";
-import dummyData from '../utils/dummyData';
+//import dummyData from '../utils/dummyData';
 import { shortendAddress } from '../utils/shortenAddress';
 
 const TransactionCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }) => {
