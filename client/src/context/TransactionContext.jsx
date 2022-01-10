@@ -166,8 +166,9 @@ export const TransactionProvider = ({ children }) => {
       await transactionHash.wait(); // here, we wait for the transaction to execute
 
       setIsLoading(false);
+      console.log(`Success - ${transactionHash.hash}`);
       setTxComplete(true);
-      alert(`Success - ${transactionHash.hash}`);
+      
      
       const transactionCount = await transactionContract.getTransactionCount();
 
@@ -177,7 +178,7 @@ export const TransactionProvider = ({ children }) => {
 
     } catch (error) {
       console.log(error);
-      console.log("Must provide an Etheruem Address");
+      alert("Must provide an Etheruem Address");
 
       throw new Error("No ethereum object");
     }
