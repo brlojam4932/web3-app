@@ -174,6 +174,7 @@ export const TransactionProvider = ({ children }) => {
 
       setTransactionCount(transactionCount.toNumber());
 
+      // this function is supposed to increment the transaction number and reload but not sure if it's working...?
       window.reload();
 
     } catch (error) {
