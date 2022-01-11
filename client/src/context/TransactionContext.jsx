@@ -181,7 +181,7 @@ export const TransactionProvider = ({ children }) => {
 
     } catch (error) {
       console.log(error);
-      //alert("Must provide an Etheruem Address");
+      if(error) return alert("Must provide an Etheruem Address");
 
       throw new Error("No ethereum object");
     }
