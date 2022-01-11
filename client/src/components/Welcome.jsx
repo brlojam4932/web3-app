@@ -15,6 +15,8 @@ import { shortendAddress } from '../utils/shortenAddress';
 
 // npm run dev (run like this now)
 
+// deploy: npm run build
+
 const commonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
 // we are returning instant code so we use paranthesis instead of curly braces
@@ -66,7 +68,7 @@ const Welcome = () => {
             Send Crypto <br /> across the world
           </h1>
           <p className='text-left mt-5 text-white font-light mf:w-9/12 w-11/12 text-base'>
-            Explore the crypto world. Buy and sell cryptocurrencies easily on Krypto.
+            Explore the crypto world. Buy and sell cryptocurrencies easily on Sensei.
           </p>
           {!currentAccount && (
             <button

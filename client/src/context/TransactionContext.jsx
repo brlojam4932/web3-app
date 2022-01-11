@@ -128,6 +128,9 @@ export const TransactionProvider = ({ children }) => {
 
       // set to first account, which is our account(msg.sender)
       setCurrentAccount(accounts[0]);
+
+      window.location.reload();
+
     } catch (error) {
       console.log(error);
 
@@ -168,18 +171,17 @@ export const TransactionProvider = ({ children }) => {
       setIsLoading(false);
       console.log(`Success - ${transactionHash.hash}`);
       setTxComplete(true);
-      
      
       const transactionCount = await transactionContract.getTransactionCount();
 
       setTransactionCount(transactionCount.toNumber());
 
       // this function is supposed to increment the transaction number and reload but not sure if it's working...?
-      window.reload();
+      window.location.reload();
 
     } catch (error) {
       console.log(error);
-      alert("Must provide an Etheruem Address");
+      //alert("Must provide an Etheruem Address");
 
       throw new Error("No ethereum object");
     }
@@ -190,7 +192,7 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     checkIfWalletIsConnected();
     checkIfTransactionsExist();
-  }, []);
+  }, [transactionCount]);
 
   // we first create a test: value={{ value: "test" }}
   // then we replace it with our "connectWallet: connectWallet", key/value pair function
